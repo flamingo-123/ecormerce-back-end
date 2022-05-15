@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
-const baseModel = require("./base-model");
 const Schema = mongoose.Schema;
 const ProductSchema = new mongoose.Schema(
   {
-    ...baseModel,
     userId:[{
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -12,12 +10,14 @@ const ProductSchema = new mongoose.Schema(
     title: { type: String, },
     desc: { type: String, },
     img: { type: String,},
-    categories: { type: Array },
-    size: { type: String },
-    color: { type: String },
-    price: { type: Number},
+    categories: {type: String },
+    size: {type: String },
+    color: {type: String },
+    price: {type: Number},
+    status:{ type: Number,default:0},
+    condition:{ type: Number,default:0}
   },
-  { timestamps: true }
+   { timestamps: true }
 );
 
 

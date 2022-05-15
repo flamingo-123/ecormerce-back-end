@@ -41,9 +41,13 @@ router
   .get(protect,getUser)
   .put(protect,updateUser)
   .delete(protect,authorize('admin'),deleteUser)
-// 设为管理员
+
+
 router
   .route("/resetPassword/:id")
   .put(resetPassword)
+
+
+
 
 module.exports = router;

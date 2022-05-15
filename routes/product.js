@@ -9,7 +9,9 @@ const {
     updateProduct,
     deleteProduct,
     getUserProduct,
-    getAllProduct
+    getAllProduct,
+    getSpecialProduct,
+    getProductPrice
 } = require('../controllers/product');
 const {Product} = require('../models')
 const storage = multer.diskStorage({
@@ -32,6 +34,7 @@ router
 router
     .route("/:id")
     .put(updateProduct)
+    
 
 router
     .route("/:id")
@@ -42,9 +45,11 @@ router
     .get(advancedResults(Product),getAllProduct)
 
 router
-    .route("/getUserProduct")
-    .get(advancedResults(Product),getUserProduct)
+    .route("/getSpecialProduct")
+    .get(advancedResults(Product),getSpecialProduct)
 
-
+    router
+    .route("/getProductPrice")
+    .get(getProductPrice)
 
 module.exports = router;

@@ -7,10 +7,11 @@ const {
   DeleteOrder,
   income,
   getUserOrders,
-  updateOrder
+  updateOrder,
+  getOrder
 } = require('../controllers/order')
 
-const {Order} = require('../models')
+
 
 router
   .route("/")
@@ -20,10 +21,16 @@ router
   .route("/get")
   .get(getUserOrders)
 
+  router
+  .route("/getOrder")
+  .post(getOrder)
+
+
 
 router
   .route("/:id")
   .delete(DeleteOrder)
+
 
 
 router

@@ -4,7 +4,7 @@ const router = express.Router();
 router.use(require("./user"));
 router.use("/order",require("./order"))
 router.use("/product",require("./product"))
-router.use("/cart",require("./cart"))
 router.use("/admin",require("./Admin"))
-// router.use("/search",require("./search"))
+router.use("/payment",require("./payment"))
+router.use("/collect",require("./collect"))
 module.exports = router;

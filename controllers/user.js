@@ -4,7 +4,7 @@ const { User } = require("../models");
 const jwt = require("../utils/jwt");
 const sendEmail = require('../utils/sendEmail')
 const crypto = require("crypto");
-
+const { Order } = require("../models");
 // 用户登录
 exports.login = async (req, res, next) => {
   try {
@@ -19,9 +19,16 @@ exports.login = async (req, res, next) => {
       }
     );
     delete user.password;
+    filter = {
+      userId: user._id,
+      payed:false,
+      status:'pending'
+    }
+    const Count = await Order.find(filter).count();
     res.status(200).json({
       user:user,
-      token:token
+      token:token,
+      Count
     });
   } catch (err) {
       next(err);
@@ -77,6 +84,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     runValidators: true,
     context: 'query'
   })
+
   if (!user)
     return next(new ErrorResponse(`No user with that id of ${req.params.id}`))
   res.status(200).json({ success: true, data: user })
@@ -100,6 +108,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
     user.password = req.body.newPassword
     await user.save({ validateModifiedOnly: true })
     res.status(200).json({
+
     });
   } catch (err) {
     console.log(err)

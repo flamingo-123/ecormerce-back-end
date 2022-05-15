@@ -3,16 +3,8 @@ const asyncHandler = require('../middleware/async')
 const mongoose = require("mongoose");
 // 创建订单
 exports.createOrder = asyncHandler(async (req, res, next) => {
-
   try {
     const newOrder = new Order(req.body);
-    // newOrder.populate('userId')
-    // .execPopulate() // returns promise
-    // .then(function (document) {
-    //   console.log(document);
-    // });
-    // // newOrder.populate("products.productId").execPopulate();
-    // console.log("123")
     const savedOrder = await newOrder.save();
     res.status(200).json(savedOrder);
   } catch (err) {
@@ -23,12 +15,12 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 // 修改订单
 exports.updateOrder = asyncHandler(async (req, res, next) => {
   try {
-    const updatedOrder = await Order.update(
+    const updatedOrder = await Order.updateMany(
       {
-        status:"pending"
+        status: "pending"
       },
       {
-        $set: {status:"cleared"},
+        $set: { status: "cleared" },
       },
       { multi: true }
     );
@@ -50,31 +42,32 @@ exports.DeleteOrder = asyncHandler(async (req, res, next) => {
 // 获得用户订单
 exports.getUserOrders = asyncHandler(async (req, res, next) => {
   try {
-    const {limit,id,page}=req.query
-    const offset=(page-1)*limit
+    const {limit, id, page,payed} = req.query
+    const offset = (page - 1) * limit
     let userOpts = [{
       path: 'userId',
       select: ['username', 'schoolName'],
-    
     }]
     let productOpts = [{
       path: 'productId',
     }]
-    filter={
-      userId:  id,
-      status: "pending"
+    filter = {
+      userId: id,
+      status: "pending",
+      payed:payed
     }
-  const Count = await Order.find(filter).count();
-  const Orders= await Order.find(filter).populate(userOpts)
-    .populate(productOpts)
-    .limit(+limit)
-    .skip(+offset)
-    .exec()
+    const Count =  await Order.find(filter).count();
+    const Orders = await Order.find(filter).populate(userOpts)
+      .populate(productOpts)
+      .limit(+limit)
+      .skip(+offset)
+      .exec()
     res.status(200).json({
-      Orders:Orders,
-      count:Count
+      Orders: Orders,
+      count: Count
     });
   } catch (err) {
+    console.log(err)
     res.status(500).json(err);
   }
 })
@@ -114,4 +107,18 @@ exports.income = asyncHandler(async (req, res, next) => {
   }
 })
 
+// 查找订单中是否包含订单
 
+exports.getOrder = asyncHandler(async (req, res, next) => {
+  try {
+    let filter={
+      userId:req.body.userId,
+      productId:req.body.productId,
+      status:'pending'
+    }
+    const orders = await Order.findOne(filter);
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})

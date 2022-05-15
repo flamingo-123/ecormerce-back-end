@@ -5,7 +5,6 @@ const advancedResults = (
   const reqQuery = { ...req.query }
   const removeFields = ['select', 'sort', 'page', 'limit']
   removeFields.forEach((param) => delete reqQuery[param])
- 
   let queryStr = JSON.stringify(reqQuery)
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, (match) => `$${match}`)
   query = model.find(JSON.parse(queryStr))
@@ -27,6 +26,8 @@ const advancedResults = (
   const endIndex = page * limit
   const total = await model.countDocuments()
   const totalPage = Math.ceil(total / limit)
+  const Count  = await model.find(JSON.parse(queryStr)).count();
+  const pageCount=Math.ceil(Count/limit)
   if (parseInt(req.query.limit) !== 0) {
     query = query.skip(startIndex).limit(limit)
   }
@@ -53,7 +54,8 @@ const advancedResults = (
       filterPage:filterPage,
       pagination,
       data: results,
-      total:total
+      total:total,
+      pageCount
     }
   } else {
     res.advancedResults = {

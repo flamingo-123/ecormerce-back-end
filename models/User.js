@@ -3,11 +3,8 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const uniqueValidator = require('mongoose-unique-validator')
 const md5 = require("../utils/md5");
-const baseModle = require("./base-model");
-const baseModel = require('./base-model');
 const UserSchema = new mongoose.Schema(
   {
-    ...baseModel,
     username: {
       type: String,
       required: true,
