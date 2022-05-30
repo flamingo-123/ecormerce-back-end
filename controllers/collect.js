@@ -101,7 +101,6 @@ exports.clearCollects = asyncHandler(async (req, res, next) => {
 exports.clearCollect = asyncHandler(async (req, res, next) => {
     console.log(req.body)
     try {
-    
         const clearCollect = await Collect.updateOne(
             {userId:req.body.userId},
             {$pull:{collects:req.body.collect}},

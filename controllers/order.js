@@ -1,6 +1,5 @@
 const { Order } = require("../models");
 const asyncHandler = require('../middleware/async')
-const mongoose = require("mongoose");
 // 创建订单
 exports.createOrder = asyncHandler(async (req, res, next) => {
   try {

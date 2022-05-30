@@ -42,7 +42,8 @@ exports.login = [
       const user = await User.findOne({ email }).select([
         "email",
         "password",
-        "username"
+        "username",
+        "schoolName"
       ]);
       if (!user) {
         return Promise.reject("用户不存在")

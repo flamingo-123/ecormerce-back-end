@@ -17,17 +17,8 @@ exports.payOrder = asyncHandler(async (req, res, next) => {
     res.status(500).json(err);
   }
 })
-exports.updateProduct = asyncHandler(async (req, res, next) => {
-  try {
 
-    res.status(200).json({
-    });
-  } catch (err) {
-    console.log(err)
-    res.status(500).json(err);
-  }
-})
-
+//付款
 exports.payment = asyncHandler(async (req, res, next) => {
   const formData = new AlipayFormData();
   const { totalPrice, OrderId } = req.body
@@ -54,7 +45,7 @@ exports.payment = asyncHandler(async (req, res, next) => {
   })
 })
 
-
+// 查询订单
 exports.queryOrder = asyncHandler(async (req, res, next) => {
   const { out_trade_no, trade_no } = req.body;
   const formData = new AlipayFormData();
@@ -86,19 +77,19 @@ exports.queryOrder = asyncHandler(async (req, res, next) => {
             case 'TRADE_SUCCESS':
               const payOrders = await payOrder.findByIdAndUpdate(out_trade_no, { payed: true })
               await Order.updateMany(
-                { $id: { $in: payOrders.products } },
+                { _id: { $in: payOrders.products } },
                 { $set: { payed: true } })
               //更新账单
               const productList = []
-              Order.find({ _id: { $in: payOrders.products } }, function (err, docs) {
+                Order.find({ _id: { $in: payOrders.products } }, function (err, docs) {
                 if (err) {
                   console.log(err);
                 }
                 else {
                   docs.forEach(element => {
-                    productList.push(element.productId.toString())
+                  productList.push(element.productId.toString())
                   });
-                  Product.updateMany(
+                 Product.updateMany(
                     { _id: { $in: productList } },
                     { $set: { condition: '2' } }, function (err, docs) {
                       if (err) {

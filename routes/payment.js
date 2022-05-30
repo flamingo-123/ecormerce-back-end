@@ -4,7 +4,7 @@ const {
  payment,
  queryOrder,
  payOrder ,
- updateProduct
+
 } = require('../controllers/pay')
 
 
@@ -20,8 +20,6 @@ router
   .route("/payOrder")
   .post(payOrder)
 
-  router
-  .route("/updateProduct")
-  .get(updateProduct)
+
 
 module.exports = router;

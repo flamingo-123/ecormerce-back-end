@@ -1,4 +1,3 @@
-console.log(req.query)
 const qNew = req.query.new;
 const qCategory = req.query.category;
 const {limit,color} = req.query;
